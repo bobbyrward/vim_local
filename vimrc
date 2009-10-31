@@ -648,6 +648,10 @@ map <leader>s? z=
    autocmd FileType ruby map <buffer> <leader><space> :w!<cr>:!ruby %<cr>
    autocmd FileType php compiler php
    autocmd FileType php map <buffer> <leader><space> <leader>cd:w<cr>:make %<cr>
+   augroup module
+       autocmd BufRead,BufNewFile *.module set filetype=php
+       autocmd BufRead,BufNewFile *.install set filetype=php
+   augroup END
 
 
    """"""""""""""""""""""""""""""
