@@ -1,0 +1,20 @@
+
+" I'm always saving macros to w, so make # run it instead of @w which gets old
+" fast
+" nnoremap # @w
+
+fun! MySys()
+        return "windows"
+endfun
+
+set runtimepath=~/vim_local,$VIMRUNTIME
+
+source ~/vim_local/vimrc
+
+set guifont=Consolas:h10:cANSI
+colorscheme wombat256
+au GUIEnter * simalt ~x
+
+nnoremap <leader>a <C-a>
+nnoremap <leader>s <C-s>
+
