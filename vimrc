@@ -290,44 +290,12 @@ try
 catch
 endtry
 
-"Moving fast to front, back and 2 sides ;)
-imap <m-$> <esc>$a
-imap <m-0> <esc>0i
-imap <D-$> <esc>$a
-imap <D-0> <esc>0i
-
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General Autocommands
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "Switch to current dir
 map <leader>cd :cd %:p:h<cr>
-
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" => Parenthesis/bracket expanding
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-vnoremap $1 <esc>`>a)<esc>`<i(<esc>
-")
-vnoremap $2 <esc>`>a]<esc>`<i[<esc>
-vnoremap $3 <esc>`>a}<esc>`<i{<esc>
-vnoremap $$ <esc>`>a"<esc>`<i"<esc>
-vnoremap $q <esc>`>a'<esc>`<i'<esc>
-vnoremap $e <esc>`>a"<esc>`<i"<esc>
-
-"Map auto complete of (, ", ', [
-inoremap $1 ()<esc>:let leavechar=")"<cr>i
-inoremap $2 []<esc>:let leavechar="]"<cr>i
-inoremap $4 {<esc>o}<esc>:let leavechar="}"<cr>O
-inoremap $3 {}<esc>:let leavechar="}"<cr>i
-inoremap $q ''<esc>:let leavechar="'"<cr>i
-inoremap $e ""<esc>:let leavechar='"'<cr>i
-au BufNewFile,BufRead *.\(vim\)\@! inoremap " ""<esc>:let leavechar='"'<cr>i
-au BufNewFile,BufRead *.\(txt\)\@! inoremap ' ''<esc>:let leavechar="'"<cr>i
-
-imap <m-l> <esc>:exec "normal f" . leavechar<cr>a
-imap <d-l> <esc>:exec "normal f" . leavechar<cr>a
-
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General Abbrevs
@@ -593,13 +561,6 @@ map <leader>s? z=
    "Bindings
    autocmd FileType tex map <silent><leader><space> :w!<cr> :silent! call Tex_RunLaTeX()<cr>
 
-   "Auto complete some things ;)
-   autocmd FileType tex inoremap $i \indent 
-   autocmd FileType tex inoremap $* \cdot 
-   autocmd FileType tex inoremap $i \item 
-   autocmd FileType tex inoremap $m \[<cr>\]<esc>O
-
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Filetype generic
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -639,7 +600,6 @@ map <leader>s? z=
    let html_use_css = 1
    let html_number_lines = 0
    let use_xhtml = 1
-   au FileType html inoremap <buffer> $td <td><space><space></td><esc>5hi
 
 
    """"""""""""""""""""""""""""""
@@ -668,14 +628,6 @@ map <leader>s? z=
 
    "Python iMaps
    au FileType python set cindent
-   au FileType python inoremap <buffer> $r return 
-   au FileType python inoremap <buffer> $s self 
-   au FileType python inoremap <buffer> $c ##<cr>#<space><cr>#<esc>kla
-   au FileType python inoremap <buffer> $i import 
-   au FileType python inoremap <buffer> $p print 
-   au FileType python inoremap <buffer> $f #--- PH ----------------------------------------------<esc>FP2xi
-
-   inoremap <Nul> <C-x><C-o>
 
    "Run in the Python interpreter
    function! Python_Eval_VSplit() range
@@ -724,15 +676,6 @@ map <leader>s? z=
    autocmd FileType java let b:jcommenter_file_author='Amir Salihefendic (amix@amix.dk)'
    autocmd FileType java map <buffer> <F2> :call JCommentWriter()<cr>
 
-   "Abbr'z
-   autocmd FileType java inoremap <buffer> $pr private 
-   autocmd FileType java inoremap <buffer> $r return 
-   autocmd FileType java inoremap <buffer> $pu public 
-   autocmd FileType java inoremap <buffer> $i import 
-   autocmd FileType java inoremap <buffer> $b boolean 
-   autocmd FileType java inoremap <buffer> $v void 
-   autocmd FileType java inoremap <buffer> $s String 
-
    "Folding
    function! JavaFold() 
      setl foldmethod=syntax
@@ -776,10 +719,6 @@ map <leader>s? z=
    au FileType javascript imap <c-t> AJS.log();<esc>hi
    au FileType javascript imap <c-a> alert();<esc>hi
    au FileType javascript setl nocindent
-   au FileType javascript inoremap <buffer> $r return 
-
-   au FileType javascript inoremap <buffer> $f //--- PH ----------------------------------------------<esc>FP2xi
-   au FileType javascript,*.htm,cheetah inoremap <buffer> $a AJS.
 
 
    """"""""""""""""""""""""""""""
