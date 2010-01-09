@@ -103,6 +103,9 @@ set shell=/bin/bash
 "Fast editing of files
 map <leader>e :e 
 
+"remap omnicomplete
+inoremap <C-f> <C-x><C-o>
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Colors and Fonts
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
