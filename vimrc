@@ -93,6 +93,8 @@ let g:mapleader = "'"
 nmap <leader>w :w!<cr>
 nmap <leader>f :find<cr>
 
+nmap <leader>j :NERDTreeToggle<cr>
+
 "Fast reloading of the .vimrc
 map <leader>s :source ~/vim_local/vimrc<cr>
 "When .vimrc is edited, reload it
@@ -102,9 +104,6 @@ set shell=/bin/bash
 
 "Fast editing of files
 map <leader>e :e 
-
-"remap omnicomplete
-inoremap <C-f> <C-x><C-o>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Colors and Fonts
@@ -293,6 +292,12 @@ try
 catch
 endtry
 
+"Moving fast to front, back and 2 sides ;)
+"imap <m-$> <esc>$a
+"imap <m-0> <esc>0i
+"imap <D-$> <esc>$a
+"imap <D-0> <esc>0i
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General Autocommands
@@ -300,11 +305,38 @@ endtry
 "Switch to current dir
 map <leader>cd :cd %:p:h<cr>
 
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" => Parenthesis/bracket expanding
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+vnoremap $1 <esc>`>a)<esc>`<i(<esc>
+")
+vnoremap $2 <esc>`>a]<esc>`<i[<esc>
+vnoremap $3 <esc>`>a}<esc>`<i{<esc>
+vnoremap $$ <esc>`>a"<esc>`<i"<esc>
+vnoremap $q <esc>`>a'<esc>`<i'<esc>
+vnoremap $e <esc>`>a"<esc>`<i"<esc>
+
+"Map auto complete of (, ", ', [
+"inoremap $1 ()<esc>:let leavechar=")"<cr>i
+"inoremap $2 []<esc>:let leavechar="]"<cr>i
+"inoremap $4 {<esc>o}<esc>:let leavechar="}"<cr>O
+"inoremap $3 {}<esc>:let leavechar="}"<cr>i
+"inoremap $q ''<esc>:let leavechar="'"<cr>i
+"inoremap $e ""<esc>:let leavechar='"'<cr>i
+"au BufNewFile,BufRead *.\(vim\)\@! inoremap " ""<esc>:let leavechar='"'<cr>i
+"au BufNewFile,BufRead *.\(txt\)\@! inoremap ' ''<esc>:let leavechar="'"<cr>i
+
+"imap <m-l> <esc>:exec "normal f" . leavechar<cr>a
+"imap <d-l> <esc>:exec "normal f" . leavechar<cr>a
+
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => General Abbrevs
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "My information
-iab xdate <c-r>=strftime("%d/%m/%y %H:%M:%S")<cr>
+iab xts brw<c-r>=strftime("%m%d%y")<cr>
+iab xdate <c-r>=strftime("%Y-%m-%d")<cr>
 iab xemail bobbyrward@gmail.com
 iab xname Bobby R. Ward
 iab cancle cancel
@@ -456,7 +488,7 @@ set fdl=0
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Text options
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-set expandtab
+" set expandtab
 set shiftwidth=4
 set tabstop=4
 
@@ -564,6 +596,13 @@ map <leader>s? z=
    "Bindings
    autocmd FileType tex map <silent><leader><space> :w!<cr> :silent! call Tex_RunLaTeX()<cr>
 
+   "Auto complete some things ;)
+   "autocmd FileType tex inoremap $i \indent 
+   "autocmd FileType tex inoremap $* \cdot 
+   "autocmd FileType tex inoremap $i \item 
+   "autocmd FileType tex inoremap $m \[<cr>\]<esc>O
+
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " => Filetype generic
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -574,7 +613,6 @@ map <leader>s? z=
    autocmd FileType python set omnifunc=pythoncomplete#Complete
    autocmd FileType javascript set omnifunc=javascriptcomplete#CompleteJS
    autocmd FileType html set omnifunc=htmlcomplete#CompleteTags
-   autocmd FileType smarty set omnifunc=htmlcomplete#CompleteTags
    autocmd FileType css set omnifunc=csscomplete#CompleteCSS
    autocmd FileType xml set omnifunc=xmlcomplete#CompleteTags
    autocmd FileType php set omnifunc=phpcomplete#CompletePHP
@@ -604,6 +642,7 @@ map <leader>s? z=
    let html_use_css = 1
    let html_number_lines = 0
    let use_xhtml = 1
+   "au FileType html inoremap <buffer> $td <td><space><space></td><esc>5hi
 
 
    """"""""""""""""""""""""""""""
@@ -626,12 +665,22 @@ map <leader>s? z=
    autocmd FileType python map <buffer> <leader><space> :w!<cr>:!python %<cr>
    autocmd FileType python so ~/vim_local/plugin/python_fold.vim
 
+   au FileType python set expandtab
+
    "Set some bindings up for 'compile' of python
    autocmd FileType python set makeprg=python\ -c\ \"import\ py_compile,sys;\ sys.stderr=sys.stdout;\ py_compile.compile(r'%')\"
    autocmd FileType python set efm=%C\ %.%#,%A\ \ File\ \"%f\"\\,\ line\ %l%.%#,%Z%[%^\ ]%\\@=%m
 
    "Python iMaps
    au FileType python set cindent
+   "au FileType python inoremap <buffer> $r return 
+   "au FileType python inoremap <buffer> $s self 
+   "au FileType python inoremap <buffer> $c ##<cr>#<space><cr>#<esc>kla
+   "au FileType python inoremap <buffer> $i import 
+   "au FileType python inoremap <buffer> $p print 
+   "au FileType python inoremap <buffer> $f #--- PH ----------------------------------------------<esc>FP2xi
+
+   "inoremap <Nul> <C-x><C-o>
 
    "Run in the Python interpreter
    function! Python_Eval_VSplit() range
@@ -672,13 +721,22 @@ map <leader>s? z=
    """""""""""""""""""""""""""""""
    " => Java section
    """""""""""""""""""""""""""""""
-   au FileType java inoremap <buffer> <C-t> System.out.println();<esc>hi
+   "au FileType java inoremap <buffer> <C-t> System.out.println();<esc>hi
 
    "Java comments
    autocmd FileType java source ~/vim_local/macros/jcommenter.vim
    autocmd FileType java let b:jcommenter_class_author='Amir Salihefendic (amix@amix.dk)'
    autocmd FileType java let b:jcommenter_file_author='Amir Salihefendic (amix@amix.dk)'
    autocmd FileType java map <buffer> <F2> :call JCommentWriter()<cr>
+
+   "Abbr'z
+   "autocmd FileType java inoremap <buffer> $pr private 
+   "autocmd FileType java inoremap <buffer> $r return 
+   "autocmd FileType java inoremap <buffer> $pu public 
+   "autocmd FileType java inoremap <buffer> $i import 
+   "autocmd FileType java inoremap <buffer> $b boolean 
+   "autocmd FileType java inoremap <buffer> $v void 
+   "autocmd FileType java inoremap <buffer> $s String 
 
    "Folding
    function! JavaFold() 
@@ -720,9 +778,13 @@ map <leader>s? z=
    au FileType javascript call JavaScriptFold()
    au FileType javascript setl fen
 
-   au FileType javascript imap <c-t> AJS.log();<esc>hi
-   au FileType javascript imap <c-a> alert();<esc>hi
+   "au FileType javascript imap <c-t> AJS.log();<esc>hi
+   "au FileType javascript imap <c-a> alert();<esc>hi
    au FileType javascript setl nocindent
+   "au FileType javascript inoremap <buffer> $r return 
+
+   "au FileType javascript inoremap <buffer> $f //--- PH ----------------------------------------------<esc>FP2xi
+   "au FileType javascript,*.htm,cheetah inoremap <buffer> $a AJS.
 
 
    """"""""""""""""""""""""""""""
@@ -748,7 +810,7 @@ map <leader>s? z=
    " => Scheme bidings
    """"""""""""""""""""""""""""""
    autocmd BufNewFile,BufRead *.scm map <buffer> <leader><space> <leader>cd:w<cr>:!petite %<cr>
-   autocmd BufNewFile,BufRead *.scm inoremap <buffer> <C-t> (pretty-print )<esc>i
+   "autocmd BufNewFile,BufRead *.scm inoremap <buffer> <C-t> (pretty-print )<esc>i
    autocmd BufNewFile,BufRead *.scm vnoremap <C-t> <esc>`>a)<esc>`<i(pretty-print <esc>
 
 
@@ -823,7 +885,7 @@ map <leader>p :cp<cr>
 function! MapToggle(key, opt)
     let cmd = ':set '.a:opt.'! \| set '.a:opt."?\<CR>"
     exec 'nnoremap '.a:key.' '.cmd
-    exec 'inoremap '.a:key." \<C-O>".cmd
+    "exec 'inoremap '.a:key." \<C-O>".cmd
 endfunction
 command -nargs=+ MapToggle call MapToggle(<f-args>)
 
@@ -845,7 +907,7 @@ set pastetoggle=<F3>
 map <F2> :%s/\s*$//g<cr>:noh<cr>''
 
 "Super paste
-inoremap <C-v> <esc>:set paste<cr>mui<C-R>+<esc>mv'uV'v=:set nopaste<cr>
+"inoremap <C-v> <esc>:set paste<cr>mui<C-R>+<esc>mv'uV'v=:set nopaste<cr>
 
 "A function that inserts links & anchors on a TOhtml export.
 " Notice:
